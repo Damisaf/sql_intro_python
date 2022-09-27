@@ -67,6 +67,22 @@ def fill():
     # Se debe utilizar la sentencia INSERT.
     # Observar que hay campos como "grade" y "tutor" que no son obligatorios
     # en el schema creado, puede obivar en algunos casos completar esos campos
+    conn = sqlite3.connect('secundaria.db')
+    c = conn.cursor()
+
+    group = [('Juana', 24, 6, 'Alicia'),
+             ('Carlos', 25, 5, 'Juan'),
+             ('Ana', 20, 6, Alicia),
+             ]
+
+
+    c.execute("""
+        INSERT INTO estudiante (name, age, grade, tutor)
+        VALUES (?,?,?,?);""", values)
+
+    conn.commit()
+    # Cerrar la conexión con la base de datos
+    conn.close()
 
 
 def fetch():
