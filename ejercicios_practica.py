@@ -70,19 +70,20 @@ def fill():
     conn = sqlite3.connect('secundaria.db')
     c = conn.cursor()
 
-    group = [('Juana', 24, 6, 'Alicia'),
-             ('Carlos', 25, 5, 'Juan'),
-             ('Ana', 20, 6, Alicia),
-             ]
+    grupo = [('Juana', 17, 6, 'Alicia'),
+             ('Carlos', 18, 3, 'Juan'),
+             ('Ana', 20, 6, 'Alicia'),
+             ('Sandra', 19, 3, 'Juan'),
+             ('Carolina', 19, 6, 'Alicia')
+            ]
 
-
-    c.execute("""
+    c.executemany("""
         INSERT INTO estudiante (name, age, grade, tutor)
-        VALUES (?,?,?,?);""", values)
+        VALUES (?,?,?,?);""", grupo)
 
     conn.commit()
-    # Cerrar la conexión con la base de datos
     conn.close()
+
 
 
 def fetch():
@@ -91,8 +92,15 @@ def fetch():
     # todas las filas con todas sus columnas
     # Utilizar fetchone para imprimir de una fila a la vez
 
+    conn = sqlite3.connect('secundaria.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM estudiante')
+    data = c.fetchall()
+    print(data)
+    conn.close()
 
-def search_by_grade(grade):
+
+def search_by_grade(grado):
     print('Operación búsqueda!')
     # Utilizar la sentencia SELECT para imprimir en pantalla
     # aquellos estudiantes que se encuentra en en año "grade"
@@ -100,6 +108,13 @@ def search_by_grade(grade):
     # De la lista de esos estudiantes el SELECT solo debe traer
     # las siguientes columnas por fila encontrada:
     # id / name / age
+    conn = sqlite3.connect('secundaria.db')
+    c = conn.cursor()
+    
+    c.execute('SELECT id, name, age FROM estudiante where grade=?', 3)
+    data = c.fetchall()
+    print(data)  
+    conn.close()
 
 
 def insert(grade):
@@ -118,11 +133,11 @@ def modify(id, name):
 if __name__ == '__main__':
     print("Bienvenidos a otra clase de Inove con Python")
     create_schema()   # create and reset database (DB)
-    # fill()
-    # fetch()
+    fill()
+    fetch()
 
-    grade = 3
-    # search_by_grade(grade)
+    grado = 3
+    search_by_grade(grado)
 
     new_student = ['You', 16]
     # insert(new_student)
