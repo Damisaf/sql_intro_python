@@ -1,46 +1,3 @@
-'''
-
-## regiones(data)
-Deben crear la función "regiones" para graficar en matplotlib las zonas donde
- la persona estuvo tranquila mirando el partido, donde estuvo aburrida y 
- donde estuvo muy enganchada y entusiasmada. Para ello se utilizará numpy para
-  calcular el valor medio y el desvio estandar como se hizo en el punto anterior
-   y deberá realizar el siguiente proceso:
-- Calcular el valor medio (mean) y el desvio estandar (std) con numpy
-
-Debe crear 3 pares de listas de datos a partir de data:
-- En una lista x1 e y1 para almacenar todos los valores menores o iguales
- al valor medio menos el desvio (pulso <= mean-std) y su índice correspondiente
-- En una lista x2 e y2 para almacenar todos los valores mayores o iguales
- al valor medio más el desvio (pulso >= mean+std) y su índice correspondiente
-- En una lista x3 e y3 para almacenar todos aquelas valores que no haya guardado
- en niguna de las dos listas anteriores y su índice correspondiente
-
-Una vez obtenidos las listas mencionadas, debe dibujar tres scatter plot 
-en un solo gráfico. 
-Cada uno de los tres scatter plot representa cada una de las listas
- mencionadas que debe dibujar con un color diferente.
-
-NOTA: Les dejamos el ejemplo de como tendrían que armar una de las tres pares
- de listas,
-  deben modificar el código siguiente para poder agregar las otras dos pares 
-  listas mencionadas (x2 y2 e x3 y3).
-IMPORTANTE: Recuerdo calcular "mean" y "std" antes con numpy.
-
-```
-x1 = []
-y1 = []
-for i in range(len(data)):
-    if data[i] <= (mean-std):
-        x1.append(i)
-        y1.append(data[i])
-```
-
-# Esquema del ejercicio
-Deben crear su archivo de python y crear las funciones mencionadas en este documento. Deben crear la sección "if _name_ == "_main_" y ahí crear el flujo de prueba de este programa:
-'''
-
-
 __author__ = "Damian Safdie"
 __email__ = "damiansafdie@gmail.com"
 __version__ = "1.1"
@@ -82,8 +39,49 @@ def estadistica(data):
     print("Valor Minimo: ", valor_min)
     print("Valor Maximo: ", valor_max)
     print("Desvio std  : ", desvio)
+    return (valor_med, desvio)
 
-    
+def regiones(data):
+    v1 = np.array(data)
+    mean = np.mean(v1)    
+    std = np.std(v1)
+    x1 = []
+    y1 = []
+    x2 = []
+    y2 = []
+    x3 = []
+    y3 = []
+    for i in range(len(data)):
+        if data[i] <= (mean-std):
+            x1.append(i)
+            y1.append(data[i])
+        elif data[i] >= (mean+std):
+            x2.append(i)
+            y2.append(data[i])
+        else:
+            x3.append(i)
+            y3.append(data[i])
+
+    fig = plt.figure()
+    fig.suptitle('Regiones', fontsize=16)
+    ax1 = fig.add_subplot(1, 3, 1)  
+    ax2 = fig.add_subplot(1, 3, 2)  
+    ax3 = fig.add_subplot(1, 3, 3) 
+
+    ax1.plot(x1, y1, c='darkgreen', label='aburrida')
+    ax1.legend()
+    ax1.grid()
+
+    ax2.scatter(x2, y2, c='darkred', label=' entusiasmada')
+    ax2.legend()
+    ax2.grid()
+
+    ax3.scatter(x3, y3, c='blue', label='tranquila')
+    ax3.legend()
+    ax3.grid()
+
+    plt.show()
+        
 
 
 if __name__ == "__main__":
@@ -93,5 +91,6 @@ if __name__ == "__main__":
   # Data analytics
   show(data)
   estadistica(data)
-  #regiones(data)
+  regiones(data)
+
 
