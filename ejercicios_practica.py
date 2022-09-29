@@ -102,6 +102,7 @@ def fetch():
 
 def search_by_grade(grado):
     print('Operación búsqueda!')
+    print ('grado:', grado )
     # Utilizar la sentencia SELECT para imprimir en pantalla
     # aquellos estudiantes que se encuentra en en año "grade"
 
@@ -111,7 +112,7 @@ def search_by_grade(grado):
     conn = sqlite3.connect('secundaria.db')
     c = conn.cursor()
     
-    c.execute('SELECT id, name, age FROM estudiante where grade=?', 3)
+    c.execute('SELECT id, name, age FROM estudiante where grade=%g' % grado)
     data = c.fetchall()
     print(data)  
     conn.close()
@@ -121,6 +122,14 @@ def insert(grade):
     print('Nuevos ingresos!')
     # Utilizar la sentencia INSERT para ingresar nuevos estudiantes
     # a la secundaria
+    conn = sqlite3.connect('secundaria.db')
+    c = conn.cursor()
+    c.execute("""
+        INSERT INTO estudiante (name, age)
+        VALUES (?,?);""", grade)
+    conn.commit()
+    conn.close()
+
 
 
 def modify(id, name):
@@ -128,8 +137,12 @@ def modify(id, name):
     # Utilizar la sentencia UPDATE para modificar aquella fila (estudiante)
     # cuyo id sea el "id" pasado como parámetro,
     # modificar su nombre por "name" pasado como parámetro
-
-
+    conn = sqlite3.connect('secundaria.db')
+    c = conn.cursor()
+    c.execute("UPDATE estudiante SET name = ? WHERE id = ?",(name, id))
+    conn.commit()
+    conn.close()
+    
 if __name__ == '__main__':
     print("Bienvenidos a otra clase de Inove con Python")
     create_schema()   # create and reset database (DB)
@@ -140,8 +153,8 @@ if __name__ == '__main__':
     search_by_grade(grado)
 
     new_student = ['You', 16]
-    # insert(new_student)
+    insert(new_student)
 
     name = '¿Inove?'
     id = 2
-    # modify(id, name)
+    modify(id, name)
